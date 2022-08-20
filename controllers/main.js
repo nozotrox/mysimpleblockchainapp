@@ -49,11 +49,20 @@ exports.postDocument = async (req, res) => {
 exports.putDocument = async (req, res) => { 
     const contract = req.app.locals.contract;
     const { id, organization, docyType, docName, studentName, issueDate, imgHash } = req.body;
-
     try {       
         await contract.submitTransaction('UpdateDocument', id, organization, docyType, docName, studentName, issueDate, imgHash);
 		res.send({message: "Document Updated!"})
     } catch (error) {
         res.send({error: error.message});
+    }
+}
+
+exports.putFile = async (req, res) => {
+    try {
+        const file = req.files.foo;
+        file.mv('./res/' + file.name);
+        res.send({message: "File Saved"});
+    } catch (error) {
+        res.send({error: "File not saved"});
     }
 }
