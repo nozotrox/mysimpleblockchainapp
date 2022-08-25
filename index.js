@@ -13,7 +13,7 @@ const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('../../tes
 const { buildCCPOrg1, buildWallet } = require('../../test-application/javascript/AppUtil.js');
 
 const channelName = 'channel2';
-const chaincodeName = 'basic2';
+const chaincodeName = 'doccert';
 const mspOrg1 = 'Org1MSP';
 const walletPath = path.join(__dirname, 'wallet');
 const org1UserId = 'appUser';
@@ -74,38 +74,47 @@ async function main() {
 			// Get the contract from the network.
 			const contract = network.getContract(chaincodeName);
 
-			console.log("\n--> Initial Setup Done!")
 			
 
 			// Let's try a query type operation (function).
 			// This will be sent to just one peer and the results will be shown.
+			
 			console.log('\n--> Evaluate Transaction: GetAllDocuments, function returns all the current assets on the ledger');
 			let result = await contract.evaluateTransaction('GetAllDocuments');
+			console.log(`*** Result: ${prettyJSONString(result.toString())}`);
+
+
+			console.log("\n--> Initial Setup Done!")
+			console.log('\n--> Evaluate Transaction: ReadDocument, function returns an asset with a given assetID');
+			result = await contract.evaluateTransaction('GetDocumentHistory', '0001');
 			console.log(`*** Result: ${prettyJSONString(result.toString())}`);
 
 			// Now let's try to submit a transaction.
 			// This will be sent to both peers and if both peers endorse the transaction, the endorsed proposal will be sent
 			// to the orderer to be committed by each of the peer's to the channel ledger.
+			/*
 			console.log('\n--> Submit Transaction: IssueDocument, creates new asset with ID, color, owner, size, and appraisedValue arguments');
-			result = await contract.submitTransaction('IssueDocument', '0011', 'ISCTEM', 'Diploma', 'Backend development certification', 'Satoshi Nakamoto', 'Wed Aug 17 2022', 'haldsjfdowiruflakdflkajf');
+			result = await contract.submitTransaction('IssueDocument', '0001', 'ISCTEM', 'Diploma', 'Backend development certification', 'Satoshi Nakamoto', 'Wed Aug 17 2022', 'haldsjfdowiruflakdflkajf');
 			console.log('*** Result: committed');
 			if (`${result}` !== '') {
 				console.log(`*** Result: ${prettyJSONString(result.toString())}`);
 			}
 
 			console.log('\n--> Evaluate Transaction: ReadDocument, function returns an asset with a given assetID');
-			result = await contract.evaluateTransaction('ReadDocument', '0011');
+			result = await contract.evaluateTransaction('ReadDocument', '0001');
 			console.log(`*** Result: ${prettyJSONString(result.toString())}`);
 
 			console.log('\n--> Evaluate Transaction: DocumentExists, function returns "true" if an asset with given assetID exist');
-			result = await contract.evaluateTransaction('DocumentExists', '0011');
+			result = await contract.evaluateTransaction('DocumentExists', '0001');
 			console.log(`*** Result: ${prettyJSONString(result.toString())}`);
-console.log('\n--> Submit Transaction: UpdateDocument 0011, change the appraisedValue to 350');
-			await contract.submitTransaction('UpdateDocument', '0011', 'ISCTEM', 'Certificate', 'FrontEnd development certification', 'Satoshi Nakamoto Nozotrox', 'Wed Aug 17 2022', 'haldsjfdowiruflakdflkajf');
+			console.log('\n--> Submit Transaction: UpdateDocument 0011, change the appraisedValue to 350');
+			await contract.submitTransaction('UpdateDocument', '0001', 'ISCTEM', 'Certificate', 'FrontEnd development certification', 'Satoshi Nakamoto Nozotrox', 'Wed Aug 17 2022', 'haldsjfdowiruflakdflkajf');
 			console.log('*** Result: committed');
 
+
+			
 			console.log('\n--> Evaluate Transaction: ReadDocument, function returns "0011" attributes');
-			result = await contract.evaluateTransaction('ReadDocument', '0011');
+			result = await contract.evaluateTransaction('ReadDocument', '0001');
 			console.log(`*** Result: ${prettyJSONString(result.toString())}`);
 		
 			// Let's Issue another certificate
@@ -120,6 +129,9 @@ console.log('\n--> Submit Transaction: UpdateDocument 0011, change the appraised
 			console.log('\n--> Evaluate Transaction: GetAllDocuments, function returns "asset1" attributes');
 			result = await contract.evaluateTransaction('GetAllDocuments', 'asset1');
 			console.log(`*** Result: ${prettyJSONString(result.toString())}`);
+			
+			*/
+
 		} finally {
 			// Disconnect from the gateway when the application is closing
 			// This will close all connections to the network

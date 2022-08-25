@@ -11,9 +11,10 @@ const fileUpload = require('express-fileupload')
 
 const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('../../test-application/javascript/CAUtil.js');
 const { buildCCPOrg1, buildWallet, } = require('../../test-application/javascript/AppUtil.js');
+const cors = require('cors');
 
 const channelName = 'channel2';
-const chaincodeName = 'basic2';
+const chaincodeName = 'doccert';
 const mspOrg1 = 'Org1MSP';
 const walletPath = path.join(__dirname, 'wallet');
 const org1UserId = 'appUser';
@@ -27,61 +28,25 @@ const mainRoute = require('./routes/main')
 
 
 const app = express();
-
+app.use(cors())
 app.use(fileUpload({ createParentPath: true}));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use('/', mainRoute);
 
-//:::::::::::::: Playground
+//:: Playground
 
-/* TO GENERATE PDF DOCUMENT
-const { PDFDocument } = require('pdf-lib');
-const start = async (pathToPDF, pathToImage) => { 
-    const pdfDoc = await PDFDocument.load(fs.readFileSync(pathToPDF));
-    const img = await pdfDoc.embedPng(fs.readFileSync(pathToImage));
-    const imagePage = pdfDoc.getPage(0);
 
-    imagePage.drawImage(img, {
-        x: 30,
-        y: 30,
-        width: 100,
-        height: 100
-    });
-
-    const pdfBytes = await pdfDoc.save();
-    const newFilePath = `${path.basename(pathToPDF, '.pdf')}-result.pdf`;
-    fs.writeFileSync(newFilePath, pdfBytes);
+const start = async () => {
+    
 }
 
-start(path.join(__dirname, "res", "pdfs", "lorem-ipsum.pdf"), path.join(__dirname, "res", "qrcodes", "qrcode.png"));
-*/
-
-
-/* TO GENERATE QRCODE
-const QRCode = require('qrcode');
-const opts = {
-    errorCorrectionLevel: 'H',
-    type: 'png',
-    quality: 0.95,
-    margin: 1,
-    color: {
-        dark: '#208698',
-        light: '#FFF',
-    },
-}
-
-QRCode.toFile(path.join(__dirname, "res", "qrcodes", "qrcode.png"), JSON.stringify("http://localhost:3000/"), opts);
-*/
-
-
-
-
+start()
 
 app.listen(process.env.PORT, async () => { 
-    return;
-
+    
     try {
+        
         
 		const ccp = buildCCPOrg1();
 		const caClient = buildCAClient(FabricCAServices, ccp, 'ca.org1.example.com');
@@ -109,7 +74,8 @@ app.listen(process.env.PORT, async () => {
         app.locals.contract = contract;
         app.locals.gateway = gateway;
         app.locals.prettyJSONString = prettyJSONString;
-
+        
+        
         console.log("\n:::::: Connection to Blockchain(Hyperledger Fabric) Network established!")
         console.log(`::::: App running at http://localhost:${process.env.PORT}`);
 

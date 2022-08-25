@@ -14,15 +14,24 @@
     "author": "Hyperledger",
     "license": "Apache-2.0",
     "dependencies": {
+        "axios": "^0.27.2",
         "body-parser": "^1.20.0",
         "cors": "^2.8.5",
+        "crypto": "^1.0.1",
         "dotenv": "^16.0.1",
         "express": "^4.18.1",
         "express-fileupload": "^1.4.0",
         "fabric-ca-client": "^2.2.4",
         "fabric-network": "^2.2.4",
+        "jsqr": "^1.4.0",
         "pdf-lib": "^1.17.1",
-        "qrcode": "^1.5.1"
+        "pdf-to-base64": "^1.0.3",
+        "pdf2pic": "^2.1.4",
+        "pngjs": "^6.0.0",
+        "qrcode": "^1.5.1",
+        "react-redux": "^8.0.2",
+        "redux": "^4.2.0",
+        "redux-thunk": "^2.4.1"
     },
     "devDependencies": {
         "eslint": "^7.32.0"
