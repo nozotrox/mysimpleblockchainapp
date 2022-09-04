@@ -79,7 +79,7 @@ exports.postDocument = async (req, res) => {
     const crypto = require('crypto');
     const contract = req.app.locals.contract;
     const prettyJSONString = req.app.locals.prettyJSONString;
-    const { id, organization, docyType, docName, studentName, issueDate } = req.body;
+    const { id, organization, docyType, docName, studentName, issueDate, grade } = req.body;
     const path = require('path');
 
     
@@ -94,7 +94,7 @@ exports.postDocument = async (req, res) => {
         const b64pdf = await pdfToBase64(filePath);
         const pdfHash = crypto.createHash('sha256').update(b64pdf).digest('hex');
 
-        const result = await contract.submitTransaction('IssueDocument', id, organization, docyType, docName, studentName, issueDate, pdfHash);
+        const result = await contract.submitTransaction('IssueDocument', id, organization, docyType, docName, studentName, grade, issueDate, pdfHash, process.env.ORG_MSP);
         if (`${result}` !== '') 
             res.send(prettyJSONString(result.toString()));
     } catch (error) {
@@ -107,7 +107,7 @@ exports.putDocument = async (req, res) => {
     const crypto = require('crypto');
     const contract = req.app.locals.contract;
     const prettyJSONString = req.app.locals.prettyJSONString;
-    const { id, organization, docyType, docName, studentName, issueDate } = req.body;
+    const { id, organization, docyType, docName, studentName, grade, issueDate } = req.body;
     let {imgHash} = req.body;
 
     const path = require('path');
@@ -125,7 +125,7 @@ exports.putDocument = async (req, res) => {
             imgHash = crypto.createHash('sha256').update(b64pdf).digest('hex');
          }
 
-        await contract.submitTransaction('UpdateDocument', id, organization, docyType, docName, studentName, issueDate, imgHash);
+        await contract.submitTransaction('UpdateDocument', id, organization, docyType, docName, studentName, grade, issueDate, imgHash, process.env.ORG_MSP.toString());
 		res.send({message: "Document Updated!"})
     } catch (error) {
         res.send({error: error.message});

@@ -2,7 +2,6 @@ const express = require('express')
 const mainController = require('../controllers/main')
 const router = express.Router()
 
-
 router.get('/off', mainController.off);
 router.get('/test', mainController.test);
 router.get('/documents', mainController.getDocuments);

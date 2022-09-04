@@ -10,12 +10,12 @@ const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
 
 const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('../../test-application/javascript/CAUtil.js');
-const { buildCCPOrg1, buildWallet, } = require('../../test-application/javascript/AppUtil.js');
+const { buildCCPOrg1, buildWallet, buildCCPOrg2, } = require('../../test-application/javascript/AppUtil.js');
 const cors = require('cors');
 
-const channelName = 'channel2';
+const channelName = 'channel5';
 const chaincodeName = 'doccert';
-const mspOrg1 = 'Org1MSP';
+const mspOrg1 = 'Org2MSP';
 const walletPath = path.join(__dirname, 'wallet');
 const org1UserId = 'appUser';
 
@@ -46,20 +46,19 @@ start()
 app.listen(process.env.PORT, async () => { 
     
     try {
-        
-        
-		const ccp = buildCCPOrg1();
-		const caClient = buildCAClient(FabricCAServices, ccp, 'ca.org1.example.com');
+
+		const ccp = buildCCPOrg2();
+		const caClient = buildCAClient(FabricCAServices, ccp, 'ca.org2.example.com');
 		const wallet = await buildWallet(Wallets, walletPath);
 		await enrollAdmin(caClient, wallet, mspOrg1);
-		await registerAndEnrollUser(caClient, wallet, mspOrg1, org1UserId, 'org1.department1');
+		await registerAndEnrollUser(caClient, wallet, mspOrg1, org1UserId, 'org2.department1');
 		const gateway = new Gateway();
 
         try {
             await gateway.connect(ccp, {
                 wallet,
                 identity: org1UserId,
-                discovery: { enabled: true, asLocalhost: true } // using asLocalhost as this gateway is using a fabric network deployed locally
+                discovery: { enabled: true, asLocalhost: true } // using Localhost as this gateway is using a fabric network deployed locally
             });
         } catch (error) {
             gateway.disconnect();
